@@ -1,26 +1,24 @@
-import warnings
-warnings.filterwarnings('ignore')
 import torch
-model_path_or_name="upstage/TinySolar-248m-4k"
 from transformers import AutoModelForCausalLM
-tiny_general_model=AutoModelForCausalLM.from_pretrained(
-        model_path_or_name,
+from transformers import AutoTokenizer
+from transformers import TextStreamer
+model_name="upstage/TinySolar-248m-4k"
+tiny_model=AutoModelForCausalLM.from_pretrained(
+        model_name,
         device_map="cpu",
         torch_dtype=torch.bfloat16
         )
-from transformers import AutoTokenizer
-tiny_general_tokenizer=AutoTokenizer.from_pretrained(
-    model_path_or_name
+tiny_tokenizer=AutoTokenizer.from_pretrained(
+    model_name
         )
-prompt="I am an engineer, I Love"
-inputs=tiny_general_tokenizer(prompt, return_tensors="pt")
-from transformers import TextStreamer
+prompt="I am a redhat employee, I like"
+inputs=tiny_tokenizer(prompt, return_tensors="pt")
 streamer=TextStreamer(
-    tiny_general_tokenizer,
+    tiny_tokenizer,
     skip_prompt=True,
     skip_special_tokens=True
         )
-outputs=tiny_general_model.generate(
+outputs=tiny_model.generate(
     **inputs,
     streamer=streamer,
     use_cache=True,
