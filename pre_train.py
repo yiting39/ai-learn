@@ -15,7 +15,7 @@ prompt="I am a redhat employee, I like"
 inputs=tiny_tokenizer(prompt, return_tensors="pt")
 streamer=TextStreamer(
     tiny_tokenizer,
-    skip_prompt=False,
+    skip_prompt=True,
     skip_special_tokens=True
         )
 outputs=tiny_model.generate(
